@@ -1,0 +1,142 @@
+/* General styles for the login page */
+.navbar-login {
+    background: #025c35; /* Darker Kerala green */
+    padding: 1rem 2rem;
+    color: #ffffff; /* White text */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-login-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .navbar-login-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+  }
+  
+  .logo-text {
+    color: #ffffff; /* White */
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Satisfy', cursive;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .logo-subtext {
+    color: #ffd700; /* Gold, representing Kerala's traditions */
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 2px;
+  }
+  
+  .navbar-login-message {
+    color: #ffffff; /* White text */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #f0f2f5;
+  }
+  
+  .login-box {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .login-header {
+    font-size: 1.5rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .login-button {
+    background: #025c35; /* Darker Kerala green */
+    color: #ffffff; /* White text */
+    border: none;
+    padding: 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .login-button:hover {
+    background: #023c24; /* Even darker green on hover */
+  }
+  
+  .login-footer {
+    text-align: center;
+    margin-top: 1rem;
+  }
+  
+  .login-footer p {
+    margin: 0;
+  }
+  
+  .register-link {
+    color: #025c35; /* Darker Kerala green */
+    text-decoration: none;
+    font-weight: 600;
+  }
+  
+  .register-link:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 600px) {
+    .login-box {
+      padding: 1rem;
+    }
+  
+    .login-header {
+      font-size: 1.3rem;
+    }
+  }
+  

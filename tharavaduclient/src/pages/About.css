@@ -1,0 +1,102 @@
+.about-intro {
+    background-color: #f0f8f0;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .about-intro h1 {
+    font-size: 36px;
+    color: #276749;
+    margin-bottom: 20px;
+  }
+  
+  .about-intro p {
+    font-size: 18px;
+    color: #4a5568;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .family-history {
+    background-color: #ffffff;
+    padding: 40px 20px;
+    text-align: left;
+  }
+  
+  .family-history .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .family-history h2 {
+    font-size: 30px;
+    color: #276749;
+    margin-bottom: 20px;
+  }
+  
+  .family-history p {
+    font-size: 18px;
+    color: #4a5568;
+    margin-bottom: 20px;
+  }
+  
+  .family-values {
+    background-color: #edf7ed;
+    padding: 40px 20px;
+    text-align: left;
+  }
+  
+  .family-values .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .family-values h2 {
+    font-size: 30px;
+    color: #276749;
+    margin-bottom: 20px;
+  }
+  
+  .family-values ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .family-values li {
+    font-size: 18px;
+    color: #4a5568;
+    margin-bottom: 10px;
+  }
+  
+  .family-photo {
+    background-color: #ffffff;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .family-photo .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .family-photo h2 {
+    font-size: 30px;
+    color: #276749;
+    margin-bottom: 20px;
+  }
+  
+  .family-photo p {
+    font-size: 18px;
+    color: #4a5568;
+    margin-bottom: 20px;
+  }
+  
+  .family-photo .photo-container {
+    display: inline-block;
+  }
+  
+  .family-photo img {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
