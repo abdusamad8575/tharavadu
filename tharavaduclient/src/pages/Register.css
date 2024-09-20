@@ -23,7 +23,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 70px); /* Adjust for header height */
+    min-height: calc(100vh - 70px);
     background: #f0f2f5;
     padding: 2rem;
   }
@@ -89,6 +89,22 @@
   
   .register-button:hover {
     background: #023c24; /* Even darker green on hover */
+  }
+  .add-button {
+    background: #0039f5;
+    color: #ffffff;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+  }
+  
+  .add-button:hover {
+    background: #0029b1;
   }
   
   @media (max-width: 600px) {

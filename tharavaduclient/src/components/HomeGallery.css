@@ -45,6 +45,7 @@
   display: block;
 }
 
+
 .view-more-btn {
   display: block;
   width: max-content;
@@ -64,6 +65,12 @@
   background-color: #014025;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-video {
+  width: 100%;
+  height: auto;
+  transition: opacity 0.3s ease;
 }
 
 @media screen and (max-width: 768px) {
