@@ -34,6 +34,11 @@
   
   .gallery-image {
     width: 100%;
+    /* height: auto; */
+    transition: opacity 0.3s ease;
+  }
+  .gallery-video {
+    width: 100%;
     height: auto;
     transition: opacity 0.3s ease;
   }

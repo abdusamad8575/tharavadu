@@ -1,53 +1,87 @@
-import React, { useState } from 'react'
-import './Gallery.css'
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './Gallery.css';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
 
 function Gallery() {
-    const images = [
-        { id: 1, src: 'https://media.istockphoto.com/id/459005973/photo/theyyam-ritual-in-kerala.jpg?s=612x612&w=0&k=20&c=uF19sDXt99iyg6K_-yCBLO4aRHPo7P4LH-ghe3uRP3U=', alt: 'Kerala Backwaters' },
-        { id: 2, src: 'https://media.istockphoto.com/id/488513942/photo/onum-celebrations.jpg?s=612x612&w=0&k=20&c=e2xnaj6lILvlUJZReiQwBG3BaF2duA3y6GFzbcRkM5Y=', alt: 'Tea Plantations' },
-        { id: 3, src: 'https://media.istockphoto.com/id/804652886/photo/indian-elephant-festival.jpg?s=612x612&w=0&k=20&c=NnPJYoTBYfnLLJlw_HTxQDbwMP1_DrkGev13EBJEzs8=', alt: 'Kerala Beach' },
-        { id: 4, src: 'https://media.istockphoto.com/id/507181584/photo/theyyam-performance.jpg?s=612x612&w=0&k=20&c=DjAU8bhtHhnPDIGiwYbzGI5KXFuC-Ia1gmBeXYCHqQQ=', alt: 'Traditional Dance' },
-        { id: 5, src: 'https://media.istockphoto.com/id/534192312/photo/thrissur-pooram.jpg?s=612x612&w=0&k=20&c=pxLTky3d0ASzZ5SgkJMTn5e3C_LvZwUQ5NCe83Ep1c0=', alt: 'Kerala Cuisine' },
-        { id: 6, src: 'https://media.istockphoto.com/id/503219304/photo/traditional-kathakali-dance-on-new-year-carnival.jpg?s=612x612&w=0&k=20&c=RgxVoXvUEfI901fjNAoAZv8O7UYLF-aKsjHO1Z6hfzY=', alt: 'Elephant Sanctuary' },
-        { id: 5, src: 'https://media.istockphoto.com/id/1051574672/photo/kathakali-artist-looks-puzzled.jpg?s=612x612&w=0&k=20&c=fYY40yH3CUi6mWgiFw7r9D86fgIr7pe3OfgBTUFrnEk=', alt: 'Kerala Cuisine' },
-        { id: 6, src: 'https://media.istockphoto.com/id/503326882/photo/musicians-performing-with-on-the-streets-of-fort-kochi-india.jpg?s=612x612&w=0&k=20&c=eaV0qDpdEiHxszdTwwuXggBOEpwo5ca_u31bSJGAkPI=', alt: 'Elephant Sanctuary' },
-      ]
+  const [items, setItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const [selectedImage, setSelectedImage] = useState(null);
+  useEffect(() => {
+    const fetchGallery = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_APP_API_BASE_URL}/api/v1/gallery/clientFetch`, {
+          params: { page: currentPage, limit: 12 }
+        });
+        setItems(response.data.gallery);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
+        console.error('Error fetching gallery data', error);
+      }
+    };
 
-  const openModal = (image) => {
-    setSelectedImage(image.src);
+    fetchGallery();
+  }, [currentPage]);
+
+  const openModal = (item) => {
+    setSelectedItem(item);
   };
 
   const closeModal = () => {
-    setSelectedImage(null);
+    setSelectedItem(null);
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   return (
     <>
-     <NavBar/>
-        <div className="gallery-container">
-          <h1 className="gallery-title">Our Gallery</h1>
-          <div className="gallery-grid">
-            {images.map((image, index) => (
-              <div className="gallery-item" key={index} onClick={() => openModal(image)}>
-                <img src={image.src} alt={`Gallery ${index}`} className="gallery-image" />
-              </div>
-            ))}
-          </div>
-    
-          {selectedImage && (
-            <div className="modal" onClick={closeModal}>
-              <span className="close">&times;</span>
-              <img className="modal-content" src={selectedImage} alt="Preview" />
+      <NavBar />
+      <div className="gallery-container">
+        <h1 className="gallery-title">Our Gallery</h1>
+        <div className="gallery-grid">
+          {items.map((item, index) => (
+            <div className="gallery-item" key={index} onClick={() => openModal(item)}>
+              {item.mimetype.startsWith('image/') ? (
+                <img src={`${import.meta.env.VITE_APP_API_BASE_URL}/uploads/${item.filename}`} alt={item.filename} className="gallery-image" />
+              ) : (
+                <video controls src={`${import.meta.env.VITE_APP_API_BASE_URL}/uploads/${item.filename}`} className="gallery-video" />
+              )}
             </div>
-          )}
+          ))}
         </div>
-       <Footer/> 
+        {selectedItem && (
+          <div className="modal" onClick={closeModal}>
+            <span className="close">&times;</span>
+            {selectedItem.mimetype.startsWith('image/') ? (
+                <img src={`${import.meta.env.VITE_APP_API_BASE_URL}/uploads/${selectedItem.filename}`} alt={selectedItem.filename} className="gallery-image" />
+              ) : (
+                <video controls src={`${import.meta.env.VITE_APP_API_BASE_URL}/uploads/${selectedItem.filename}`} className="gallery-video" />
+              )}
+          </div>
+        )}
+        <div className="pagination">
+          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+            Previous
+          </button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+            Next
+          </button>
+        </div>
+      </div>
+      <Footer />
     </>
-  )
+  );
 }
 
-export default Gallery
+export default Gallery;
