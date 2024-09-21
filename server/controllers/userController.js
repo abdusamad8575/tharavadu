@@ -17,26 +17,28 @@ const registerUser = async (req, res) => {
 
 
     if (!userName) {
-      return res.status(400).json({ error: 'Email is required' });
+      return res.status(400).json({ error: 'Email is required' ,message:'Email is required'});
     }
 
  
     const existingUser = await User.findOne({ userName });
-    console.log('existingUser:-',existingUser);
     
     if (existingUser) {
-      return res.status(400).json({ error: 'User with this email already exists' });
+      return res.status(400).json({ error: 'User with this email already exists',message:'User with this email already exists' });
     }
-
-    const childrenNameArray = Array.isArray(childrenName) ? childrenName : [childrenName];
-    const childrenAgeArray = Array.isArray(childrenAge) ? childrenAge : [childrenAge];
-    const childrenGenderArray = Array.isArray(childrenGender) ? childrenGender : [childrenGender];
-
-    const childrenDetails = childrenNameArray.map((name, index) => ({
-      name,
-      age: childrenAgeArray[index],
-      gender: childrenGenderArray[index]
-    }));
+    let childrenDetails;
+    if(marriageStatus === 'yes' && childrenName){
+      const childrenNameArray = Array.isArray(childrenName) ? childrenName : [childrenName];
+      const childrenAgeArray = Array.isArray(childrenAge) ? childrenAge : [childrenAge];
+      const childrenGenderArray = Array.isArray(childrenGender) ? childrenGender : [childrenGender];
+  
+      childrenDetails = childrenNameArray.map((name, index) => ({
+        name,
+        age: childrenAgeArray[index],
+        gender: childrenGenderArray[index]
+      }));
+    }
+    
 
     const hashedPassword = await bcrypt.hash(password, 10);     
 
@@ -46,7 +48,7 @@ const registerUser = async (req, res) => {
       dob,
       gender,
       fatherName,
-      motherName,
+      motherName,   
       grandmotherName,
       photo: req.file.filename,
       address,
@@ -55,7 +57,7 @@ const registerUser = async (req, res) => {
       job,
       marriageStatus,
       spouseName: marriageStatus === 'yes' ? spouseName : undefined,
-      children: childrenDetails.length ? childrenDetails : undefined,
+      children: childrenDetails,
       subgroup,
       userName,
       password: hashedPassword,
