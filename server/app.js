@@ -2,14 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const router = require('./routes/index.js');
 const morgan = require('morgan');
-const path = require('path')
+const path = require('path')    
 const dotenv = require('dotenv');
 dotenv.config();       
    
 const app = express();  
 const corsOptions = {    
   origin: [process.env.CLIENT_PORT_LOCAL,process.env.ADMIN_PORT_LOCAL],
-  credentials: true,        
+  credentials: true,               
 };
 app.use(cors(corsOptions));                 
 // app.use(cors());          
