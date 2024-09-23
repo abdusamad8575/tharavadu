@@ -8,7 +8,8 @@ function NavBar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLoginLogout = () => {
-    navigate('/login')
+    // navigate('/login')
+    navigate('/register')
   };
 
   return (

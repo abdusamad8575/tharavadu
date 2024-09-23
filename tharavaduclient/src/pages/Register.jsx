@@ -1,8 +1,10 @@
 
 import React, { useState } from 'react';
 import './Register.css';
+import { useNavigate } from 'react-router-dom';
 
 function Register() {
+  const navigate = useNavigate()
   const [disable, setDisable] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
@@ -112,6 +114,7 @@ function Register() {
           password: '',
           confirmPassword: '',
         });
+        navigate('/')
       } else {
         if(response.status === 400){
           alert('User with this email already exists');
