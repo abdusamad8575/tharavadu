@@ -58,8 +58,7 @@ const TableData = () => {
     downloadUsersExcel();
   };
 
-  const handleDownloadPDF = (userId) => (e) => {
-    e.preventDefault();
+  const handleDownloadPDF = (userId) => {
     downloadUserPDF(userId);
   };
 
