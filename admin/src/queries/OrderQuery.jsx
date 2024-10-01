@@ -1,47 +1,77 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getBulkOrders, getOrderById, getOrders,editOrder} from "./orderUrls";
+// import { useQuery } from 'react-query';
+// import axios from 'axios';
+// import orderUrls from './orderUrls';
 
-const useGetOrders = (data) => {
-  return useQuery(["get_orders", data], () => getOrders(data), {
-    staleTime: 3000,
+// const fetchUsers = async ({ queryKey }) => {
+//   const [_key, { pageNo, pageCount, searchTerm, ageFilter, sortBy }] = queryKey;
+//   const params = new URLSearchParams();
+
+//   if (searchTerm) params.append('searchTerm', searchTerm);
+//   if (ageFilter) params.append('ageFilter', ageFilter);
+//   if (sortBy) params.append('sortBy', sortBy);
+//   params.append('page', pageNo);
+//   params.append('perpageitems', pageCount);
+
+//   const { data } = await axios.get(orderUrls.getUsers, { params });
+//   return data;
+// };
+
+// // Hook to get users with search, filter, and pagination
+// export const useGetUsers = ({ pageNo, pageCount, searchTerm, ageFilter, sortBy }) => {
+//   return useQuery(['users', { pageNo, pageCount, searchTerm, ageFilter, sortBy }], fetchUsers, {
+//     keepPreviousData: true, // Keep previous data while fetching new
+//     refetchOnWindowFocus: false // Avoid refetching on window focus for better UX
+//   });
+// };
+
+// // Hook for Excel download
+// export const downloadUsersExcel = () => {
+//   window.location.href = orderUrls.downloadUsersExcel;
+// };
+
+// // Hook for PDF download
+// export const downloadUserPDF = (userId) => {
+//   window.open(orderUrls.downloadUserPDF(userId));
+// };
+
+
+
+
+import { useQuery } from 'react-query';
+import axios from 'axios';
+import orderUrls from './orderUrls';
+
+const fetchUsers = async ({ queryKey }) => {
+  const [_key, { pageNo, pageCount, searchTerm, ageFilter, sortBy, subgroup,searchGrandMother }] = queryKey;
+  const params = new URLSearchParams();
+
+  if (searchTerm) params.append('searchTerm', searchTerm);
+  if (searchGrandMother) params.append('searchGrandMother', searchGrandMother);
+  if (ageFilter) params.append('ageFilter', ageFilter);
+  if (sortBy) params.append('sortBy', sortBy);
+  if (subgroup) params.append('subgroup', subgroup);
+  params.append('page', pageNo);
+  params.append('perpageitems', pageCount);
+
+  const { data } = await axios.get(orderUrls.getUsers, { params });
+  return data;
+};
+
+export const useGetUsers = ({ pageNo, pageCount, searchTerm, ageFilter, sortBy, subgroup,searchGrandMother }) => {
+  return useQuery(['users', { pageNo, pageCount, searchTerm, ageFilter, sortBy, subgroup,searchGrandMother }], fetchUsers, {
     keepPreviousData: true,
-    // refetchOnWindowFocus: false,
-  });
-};
-const useUpdateOrderStatus = () => {
-  
-  const queryClient = useQueryClient();
-
-  return useMutation(({ orderId, newStatus }) => editOrder({ orderId, newStatus }), {
-      onSuccess: (data) => {
-          queryClient.invalidateQueries("get_orders");
-          return data;
-      },
-      onError: (data) => {
-          return data;
-      },
+    refetchOnWindowFocus: false
   });
 };
 
-const useGetBulkOrders = (data) => {
-  return useQuery(["get_bulk_orders", data], () => getBulkOrders(data), {
-    staleTime: 3000,
-    keepPreviousData: true,
-    // refetchOnWindowFocus: false,
-  });
+export const downloadUsersExcel = () => {
+  window.location.href = orderUrls.downloadUsersExcel;
 };
 
-const useGetOrderById = (data) => {
-  return useQuery(["get_orders", data], () => getOrderById(data), {
-    // staleTime: 30000,
-    keepPreviousData: true,
-    refetchOnWindowFocus: false,
-  });
+export const downloadUserPDF = (userId) => {
+  window.open(orderUrls.downloadUserPDF(userId));
 };
 
-export {
-  useGetOrders,
-  useGetOrderById,
-  useGetBulkOrders,
-  useUpdateOrderStatus
+export const downloadAllUsersPDF = () => {
+  window.open(orderUrls.downloadAllUsersPDF);
 };

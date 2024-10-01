@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './NavBar.css';
 import { Link, useNavigate } from 'react-router-dom';
 
 function NavBar() {
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleLoginLogout = () => {
-    // navigate('/login')
-    navigate('/register')
+    navigate('/login')
+  };
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem('accessToken');
+    setIsAuthenticated(!!accessToken); 
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setIsAuthenticated(false);  
+    navigate('/');  
   };
 
   return (
@@ -25,8 +36,8 @@ function NavBar() {
           <Link to={"/gallery"} className="navbar-item">Gallery</Link>
           <Link to={"/events"} className="navbar-item">Events</Link>
           <Link to={"/contact"} className="navbar-item">Contact</Link>
-          {isLoggedIn ? (
-            <button onClick={handleLoginLogout} className="navbar-button">Logout</button>
+          {isAuthenticated ?  (
+            <button onClick={handleLogout} className="navbar-button">Logout</button>
           ) : (
             <button onClick={handleLoginLogout} className=" navbar-button">Login</button>
           )}

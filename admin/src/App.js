@@ -23,7 +23,7 @@ import "assets/css/style.css";
 import AddCategory from "pages/Category/AddCategory";
 import AddProduct from "pages/Products/AddProduct";
 import EditProduct from "pages/Products/EditProduct";
-import EditOrder from "pages/Orders/EditOrder";
+import EditUsers from "pages/Users/EditUsers";
 import Login from "pages/Auth";
 import AddGallery from "pages/Gallery/AddGallery";
 import AddBlog from "pages/Blogs/AddBlog";
@@ -114,7 +114,7 @@ export default function App() {
                 <Route path="/events/editEvents/:id" element={<EditCategory />} />
                 <Route path="/products/addProducts" element={<AddProduct />} />
                 <Route path="/products/editProduct/:id" element={<EditProduct />} />
-                <Route path="/orders/editOrder/:id" element={<EditOrder />} />
+                <Route path="/users/editUsers/:id" element={<EditUsers />} />
 
                 <Route path="/videos/editVideo/:id" element={<EditVideo />} />
                 <Route path="/videos/addVideo" element={<AddVideo />} />
@@ -153,7 +153,7 @@ export default function App() {
               <Route path="/gallery/editGallery/:id" element={<EditGallery />} />
               {/* <Route path="/blogs/addBlog" element={<AddBlog />} /> */}
               <Route path="/products/editProduct/:id" element={<EditProduct />} />
-              <Route path="/orders/editOrder/:id" element={<EditOrder />} />
+              <Route path="/users/editUsers/:id" element={<EditUsers />} />
 
               <Route path="/videos/editVideo/:id" element={<EditVideo />} />
               <Route path="/videos/addVideo" element={<AddVideo />} />
