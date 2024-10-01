@@ -187,7 +187,7 @@ const downloadUsersExcel = async (req, res) => {
     const userData = users.map(user => ({
       Name: user.name,
       Age: user.age,
-      dob: user.dob,
+      dob: new Date(user.dob).toISOString().split('T')[0],
       Gender: user.gender,
       FatherName: user.fatherName,
       MotherName: user.motherName,
@@ -267,6 +267,7 @@ const downloadUserPDF = async (req, res) => {
     const startY = 100;
     const startX = (doc.page.width / 2) - 75; 
 
+
     if (user.photo) {
       try {
         const imageBuffer = await fetchImage(photoUrl);
@@ -277,26 +278,82 @@ const downloadUserPDF = async (req, res) => {
     } else {
       doc.text('No Photo Provided', { align: 'center' });
     }
+
     const textStartY = startY + 180;
     doc.fontSize(25).text('User Details', { align: 'center', y: textStartY });
     doc.fontSize(15);
-    doc.text(`Name: ${user.name}`, 50, textStartY + 40);  
-    doc.text(`Age: ${user.age}`, 50, textStartY + 60);
-    doc.text(`Gender: ${user.gender}`, 50, textStartY + 80);
-    doc.text(`Father: ${user.fatherName}`, 50, textStartY + 100);
-    doc.text(`Mother: ${user.motherName}`, 50, textStartY + 120);
-    doc.text(`Subgroup: ${user.subgroup}`, 50, textStartY + 140);
-    doc.text(`Phone: ${user.phone}`, 50, textStartY + 160);
-    doc.text(`Address: ${user.address}`, 50, textStartY + 180);
+    let currentY = textStartY + 40;
+
+    const date = new Date(user.dob)
+    const formattedDate1 = date.toISOString().split('T')[0];
+
+    const userDetails = [
+      `Name: ${user.name}`,
+      `Age: ${user.age}`,
+      `Gender: ${user.gender}`,
+      `DOB: ${formattedDate1}`,
+      `Father: ${user.fatherName}`,
+      `Mother: ${user.motherName}`,
+      `Grand Mother: ${user.grandmotherName}`,
+      `Subgroup: ${user.subgroup}`,
+      `Job: ${user.job}`,
+      `Phone: ${user.phone}`,
+      `Address: ${user.address}`,
+      `Temp Address: ${user.temAddress}`,
+      `User Name: ${user.userName}`,
+      `Marriage Status: ${user.marriageStatus}`
+    ];
+
+    userDetails.forEach(detail => {
+      if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+        doc.addPage(); 
+        currentY = 40; 
+      }
+      doc.text(detail, 50, currentY);
+      currentY += 20; 
+    });
+
+    if (user.spouseName) {
+      if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+        doc.addPage();
+        currentY = 40;
+      }
+      doc.text(`Spouse Name: ${user.spouseName}`, 50, currentY);
+      currentY += 20;
+    }
+
+ 
+    if (user.children && user.children.length > 0) {
+      if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+        doc.addPage();
+        currentY = 40;
+      }
+      doc.text('Children Details:', 50, currentY);
+      currentY += 20;
+
+      user.children.forEach((child, index) => {
+        if (currentY + 40 > doc.page.height - doc.page.margins.bottom) {
+          doc.addPage();
+          currentY = 40;
+        }
+        doc.text(`Child ${index + 1}:`, 50, currentY);
+        currentY += 20;
+        doc.text(`  Name: ${child.name}`, 70, currentY);
+        currentY += 20;
+        doc.text(`  Age: ${child.age}`, 70, currentY);
+        currentY += 20;
+        doc.text(`  Gender: ${child.gender}`, 70, currentY);
+        currentY += 30; 
+      });
+    }
+
     doc.end();
 
-    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error generating PDF' });
   }
 };
-
 
 
 
@@ -308,7 +365,8 @@ const generateUserPDF = async (user, outputPath) => {
       doc.pipe(outputFile);
 
       const startY = 100;
-      const startX = (doc.page.width / 2) - 75;  // Center image horizontally (150/2)
+      const startX = (doc.page.width / 2) - 75; 
+
 
       if (user.photo) {
         try {
@@ -323,20 +381,72 @@ const generateUserPDF = async (user, outputPath) => {
       }
 
       const textStartY = startY + 180;
+      let currentY = textStartY;
 
-      // Add title and user details
+
       doc.fontSize(25).text('User Details', { align: 'center', y: textStartY });
       doc.fontSize(15);
 
-      // Add user details explicitly positioned under the title
-      doc.text(`Name: ${user.name}`, 50, textStartY + 40);  // Start 40 units below title
-      doc.text(`Age: ${user.age}`, 50, textStartY + 60);
-      doc.text(`Gender: ${user.gender}`, 50, textStartY + 80);
-      doc.text(`Father: ${user.fatherName}`, 50, textStartY + 100);
-      doc.text(`Mother: ${user.motherName}`, 50, textStartY + 120);
-      doc.text(`Subgroup: ${user.subgroup}`, 50, textStartY + 140);
-      doc.text(`Phone: ${user.phone}`, 50, textStartY + 160);
-      doc.text(`Address: ${user.address}`, 50, textStartY + 180);
+      const date = new Date(user.dob)
+      const formattedDate1 = date.toISOString().split('T')[0];
+
+      const userDetails = [
+        `Name: ${user.name}`,
+        `Age: ${user.age}`,
+        `Gender: ${user.gender}`,
+        `DOB: ${formattedDate1}`,
+        `Father: ${user.fatherName}`,
+        `Mother: ${user.motherName}`,
+        `Grand Mother: ${user.grandmotherName}`,
+        `Subgroup: ${user.subgroup}`,
+        `Job: ${user.job}`,
+        `Phone: ${user.phone}`,
+        `Address: ${user.address}`,
+        `Temp Address: ${user.temAddress}`,
+        `User Name: ${user.userName}`,
+        `Marriage Status: ${user.marriageStatus}`
+      ];
+
+      userDetails.forEach(detail => {
+        if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+          doc.addPage(); 
+          currentY = 40; 
+        }
+        doc.text(detail, 50, currentY);
+        currentY += 20; 
+      });
+
+      if (user.spouseName) {
+        if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+          doc.addPage();
+          currentY = 40;
+        }
+        doc.text(`Spouse Name: ${user.spouseName}`, 50, currentY);
+        currentY += 20;
+      }
+      if (user.children && user.children.length > 0) {
+        if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+          doc.addPage();
+          currentY = 40;
+        }
+        doc.text('Children Details:', 50, currentY);
+        currentY += 20;
+
+        user.children.forEach((child, index) => {
+          if (currentY + 40 > doc.page.height - doc.page.margins.bottom) {
+            doc.addPage();
+            currentY = 40;
+          }
+          doc.text(`Child ${index + 1}:`, 50, currentY);
+          currentY += 20;
+          doc.text(`  Name: ${child.name}`, 70, currentY);
+          currentY += 20;
+          doc.text(`  Age: ${child.age}`, 70, currentY);
+          currentY += 20;
+          doc.text(`  Gender: ${child.gender}`, 70, currentY);
+          currentY += 30; 
+        });
+      }
 
       doc.end();
 

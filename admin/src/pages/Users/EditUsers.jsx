@@ -37,7 +37,7 @@ const EditUsers = () => {
               <Typography variant='body2'><strong>Name: </strong> {details?.name}</Typography>
               <Typography variant='body2'><strong>Age: </strong> {details?.age}</Typography>
               <Typography variant='body2'><strong>Gender: </strong> {details?.gender}</Typography>
-              <Typography variant='body2'><strong>DOB: </strong>{details?.dob}</Typography>
+              <Typography variant='body2'><strong>DOB: </strong>{new Date(details?.dob).toISOString().split('T')[0]}</Typography>
               <Typography variant='body2'><strong>Father: </strong> {details?.fatherName}</Typography>
               <Typography variant='body2'><strong>Mother: </strong>{details?.motherName}</Typography>
               <Typography variant='body2'><strong>Grand Mother: </strong>{details?.grandmotherName}</Typography>
