@@ -14,7 +14,8 @@ const EditUsers = () => {
     setDetails(user);
   }, [user]);
 
-  const downloadPDF = () => {
+  const downloadPDF = (e) => {
+    e.preventDefault();
     downloadUserPDF(details?._id);
   };
 
