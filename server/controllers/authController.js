@@ -217,46 +217,41 @@ try {
 // };
 
 module.exports.signin = async (req, res) => {
+  
   const { password, email } = req.body;
   try {
-    // Find the user by email
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ userName:email });
     if (!existingUser) {
       return res.status(401).json({ message: "Email not found" });
     }
 
-    // Compare the provided password with the stored hashed password
     const passwordMatch = await bcrypt.compare(password, existingUser.password);
     if (!passwordMatch) {
-      return res.status(401).json({ message: "Wrong password" });
+      return res.status(401).json({ message: "Incorrect password" });
     }
 
-    // Generate the access token
+    // Generate JWT tokens
     const accessToken = jwt.sign(
       { _id: existingUser._id },
       process.env.JWT_ACCESS_SECRET,
-      {
-        expiresIn: process.env.JWT_ACCESS_EXPIRY,
-      }
+      { expiresIn: process.env.JWT_ACCESS_EXPIRY }
     );
 
-    // Generate the refresh token
     const refreshToken = jwt.sign(
       { _id: existingUser._id },
       process.env.JWT_REFRESH_SECRET,
-      {
-        expiresIn: process.env.JWT_REFRESH_EXPIRY,
-      }
+      { expiresIn: process.env.JWT_REFRESH_EXPIRY }
     );
 
-    // Respond with the user data and tokens
+    // Respond with tokens and user data
     res.status(200).json({
       proceed: true,
-      data: { token: { accessToken, refreshToken }, existingUser },
+      data: { token: { accessToken, refreshToken }, user: existingUser },
       message: "Login successful",
     });
+
   } catch (error) {
-    console.log("Error during sign-in:", error);
+    console.error("Error during sign-in:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

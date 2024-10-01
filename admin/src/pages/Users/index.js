@@ -4,7 +4,7 @@ import TableData from "./tableData";
 function Orders() {
   return (
     <PageLayout
-      title={'Orders'}
+      title={'Users'}
     >
       <TableData />
     </PageLayout>

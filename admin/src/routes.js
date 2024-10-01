@@ -1,7 +1,7 @@
 import Dashboard from "pages/Dashboard";
 import Category from "pages/Category";
 import Products from "pages/Products";
-import Orders from "pages/Orders";
+import Users from "pages/Users";
 import Gallery from "pages/Gallery";
 import Blogs from "pages/Blogs";
 import Videos from "pages/Video";
@@ -27,21 +27,21 @@ const routes = [
     icon: <Box component="i" color="info" fontSize="14px" className="ni ni-single-copy-04" />,
     component: <Category />,
   },
+  // {
+  //   type: "route",
+  //   name: "Products",
+  //   key: "products",
+  //   route: "/products",
+  //   icon: <Box component="i" color="primary" fontSize="14px" className="ni ni-bulb-61" />,
+  //   component: <Products />,
+  // },
   {
     type: "route",
-    name: "Products",
-    key: "products",
-    route: "/products",
-    icon: <Box component="i" color="primary" fontSize="14px" className="ni ni-bulb-61" />,
-    component: <Products />,
-  },
-  {
-    type: "route",
-    name: "Orders",
-    key: "orders",
-    route: "/orders",
+    name: "Users",
+    key: "users",
+    route: "/users",
     icon: <Box component="i" color="warning" fontSize="14px" className="ni ni-cart" />,
-    component: <Orders />,
+    component: <Users />,
   },
   {
     type: "route",

@@ -3,7 +3,7 @@
 .home-banner {
   position: relative;
   height: 100vh;
-  background-image: url('https://media.istockphoto.com/id/1206872981/photo/ritual-art-kandanar-kelan-theyyam-of-northern-kerala-jumping-through-fire-in-night.jpg?s=612x612&w=0&k=20&c=d-gQFhfQrk3FnfpsLzFTdsaPJ3Gd5E5aPEtOeUqEXJM=');
+  background-image: url('WhatsApp Image 2024-09-25 at 09.35.25_9427cba2.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
@@ -21,7 +21,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
