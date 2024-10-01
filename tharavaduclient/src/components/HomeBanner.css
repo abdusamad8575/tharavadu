@@ -3,7 +3,7 @@
 .home-banner {
   position: relative;
   height: 100vh;
-  background-image: url('bannerImage.jpg');
+  background-image:url('../assets/bannerImage.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
