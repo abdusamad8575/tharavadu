@@ -229,7 +229,9 @@ function Register() {
               <input type="file" id="photo"
                 name="photo"
                 onChange={handleChange}
-                required />
+                required
+                accept="image/*"
+                 />
             </div>
             <div className="form-group">
               <label htmlFor="address">PERMANENT ADDRESS</label>
