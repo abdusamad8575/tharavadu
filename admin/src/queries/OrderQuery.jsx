@@ -75,3 +75,19 @@ export const downloadUserPDF = (userId) => {
 export const downloadAllUsersPDF = () => {
   window.open(orderUrls.downloadAllUsersPDF);
 };
+
+export const updateUserDetails = async (userId, data) => {
+  const formData = new FormData();
+  Object.keys(data).forEach((key) => {
+    if (key === 'photo' && typeof data[key] === 'object') {
+      formData.append(key, data[key]); // Append file
+    } else {
+      formData.append(key, data[key]); // Append text fields
+    }
+  });
+
+  const response = await axios.put(`${process.env.REACT_APP_API_URL}/api/v1/user/users/${userId}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  return response.data;
+};

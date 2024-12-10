@@ -68,6 +68,7 @@ const TableData = () => {
   };
 
   const columns = [
+    { name: 'No', align: 'left' },
     { name: 'User', align: 'left' },
     { name: 'Father', align: 'left' },
     { name: 'Mother', align: 'left' },
@@ -77,7 +78,8 @@ const TableData = () => {
     { name: 'Details', align: 'center' },
   ];
 
-  const rows = data?.users?.map((user) => ({
+  const rows = data?.users?.map((user,index) => ({
+    No:index+1,
     User: (
       <User
         image={`${process.env.REACT_APP_API_URL}/uploads/${user?.photo}`}
