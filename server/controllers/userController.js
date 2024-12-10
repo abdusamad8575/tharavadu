@@ -142,27 +142,27 @@ const getUsers = async (req, res) => {
     const usersFullDetails = await User.find(filter)
 
     mainUserDatas = usersFullDetails;
-    // const total = await User.countDocuments(filter);
+    const total = await User.countDocuments(filter);
 
-    let totalMembersCount = 0;
+    // let totalMembersCount = 0;
 
-    mainUserDatas.forEach(user => {
-      let count = 0;
-
-
-      if (user.name) count += 1;
-      if (user.fatherName) count += 1;
-      if (user.motherName) count += 1;
-      if (user.grandmotherName) count += 1;
-      if (user.spouseName) count += 1;
+    // mainUserDatas.forEach(user => {
+    //   let count = 0;
 
 
-      if (user.children && Array.isArray(user.children)) {
-        count += user.children.length;
-      }
-      totalMembersCount += count;
-    });
-    const total = totalMembersCount;
+    //   if (user.name) count += 1;
+    //   if (user.fatherName) count += 1;
+    //   if (user.motherName) count += 1;
+    //   if (user.grandmotherName) count += 1;
+    //   if (user.spouseName) count += 1;
+
+
+    //   if (user.children && Array.isArray(user.children)) {
+    //     count += user.children.length;
+    //   }
+    //   totalMembersCount += count;
+    // });
+    // const total = totalMembersCount;    
 
     res.json({ users, total });
   } catch (error) {
@@ -247,6 +247,114 @@ async function fetchImage(url) {
   return Buffer.from(response.data, 'binary');
 }
 
+// const downloadUserPDF = async (req, res) => {
+//   try {
+//     const userId = req.params.id;
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+
+//     const doc = new PDFDocument();
+//     const filename = `user_${userId}.pdf`;
+
+//     res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+//     res.setHeader('Content-Type', 'application/pdf');
+
+//     doc.pipe(res);
+//     const photoUrl = `${process.env.UPLOAD_DIR}/${user.photo}`;
+
+//     const startY = 100;
+//     const startX = (doc.page.width / 2) - 75; 
+
+
+//     if (user.photo) {
+//       try {
+//         const imageBuffer = await fetchImage(photoUrl);
+//         doc.image(imageBuffer, startX, startY, { width: 150, height: 150 });
+//       } catch (err) {
+//         doc.text('Unable to load photo', { align: 'center' });
+//       }
+//     } else {
+//       doc.text('No Photo Provided', { align: 'center' });
+//     }
+
+//     const textStartY = startY + 180;
+//     doc.fontSize(25).text('User Details', { align: 'center', y: textStartY });
+//     doc.fontSize(15);
+//     let currentY = textStartY + 40;
+
+//     const date = new Date(user.dob)
+//     const formattedDate1 = date.toISOString().split('T')[0];
+
+//     const userDetails = [
+//       `Name: ${user.name}`,
+//       `Age: ${user.age}`,
+//       `Gender: ${user.gender}`,
+//       `DOB: ${formattedDate1}`,
+//       `Father: ${user.fatherName}`,
+//       `Mother: ${user.motherName}`,
+//       `Grand Mother: ${user.grandmotherName}`,
+//       `Subgroup: ${user.subgroup}`,
+//       `Job: ${user.job}`,
+//       `Phone: ${user.phone}`,
+//       `Address: ${user.address}`,
+//       `Temp Address: ${user.temAddress}`,
+//       `User Name: ${user.userName}`,
+//       `Marriage Status: ${user.marriageStatus}`
+//     ];
+
+//     userDetails.forEach(detail => {
+//       if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+//         doc.addPage(); 
+//         currentY = 40; 
+//       }
+//       doc.text(detail, 50, currentY);
+//       currentY += 20; 
+//     });
+
+//     if (user.spouseName) {
+//       if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+//         doc.addPage();
+//         currentY = 40;
+//       }
+//       doc.text(`Spouse Name: ${user.spouseName}`, 50, currentY);
+//       currentY += 20;
+//     }
+
+
+//     if (user.children && user.children.length > 0) {
+//       if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+//         doc.addPage();
+//         currentY = 40;
+//       }
+//       doc.text('Children Details:', 50, currentY);
+//       currentY += 20;
+
+//       user.children.forEach((child, index) => {
+//         if (currentY + 40 > doc.page.height - doc.page.margins.bottom) {
+//           doc.addPage();
+//           currentY = 40;
+//         }
+//         doc.text(`Child ${index + 1}:`, 50, currentY);
+//         currentY += 20;
+//         doc.text(`  Name: ${child.name}`, 70, currentY);
+//         currentY += 20;
+//         doc.text(`  Age: ${child.age}`, 70, currentY);
+//         currentY += 20;
+//         doc.text(`  Gender: ${child.gender}`, 70, currentY);
+//         currentY += 30; 
+//       });
+//     }
+
+//     doc.end();
+
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Error generating PDF' });
+//   }
+// };
+
 const downloadUserPDF = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -262,11 +370,10 @@ const downloadUserPDF = async (req, res) => {
     res.setHeader('Content-Type', 'application/pdf');
 
     doc.pipe(res);
-    const photoUrl = `${process.env.UPLOAD_DIR}/${user.photo}`;
-    
-    const startY = 100;
-    const startX = (doc.page.width / 2) - 75; 
 
+    const photoUrl = `${process.env.UPLOAD_DIR}/${user.photo}`;
+    const startY = 100;
+    const startX = (doc.page.width / 2) - 75;
 
     if (user.photo) {
       try {
@@ -279,82 +386,100 @@ const downloadUserPDF = async (req, res) => {
       doc.text('No Photo Provided', { align: 'center' });
     }
 
-    const textStartY = startY + 180;
-    doc.fontSize(25).text('User Details', { align: 'center', y: textStartY });
+    let currentY = startY + 180;
+    doc.fontSize(25).text('User Details', { align: 'center', y: currentY });
     doc.fontSize(15);
-    let currentY = textStartY + 40;
+    currentY += 40;
 
-    const date = new Date(user.dob)
-    const formattedDate1 = date.toISOString().split('T')[0];
-
+    const formattedDate = new Date(user.dob).toISOString().split('T')[0];
     const userDetails = [
       `Name: ${user.name}`,
       `Age: ${user.age}`,
       `Gender: ${user.gender}`,
-      `DOB: ${formattedDate1}`,
+      `DOB: ${formattedDate}`,
+      `Phone: ${user.phone}`,
       `Father: ${user.fatherName}`,
       `Mother: ${user.motherName}`,
       `Grand Mother: ${user.grandmotherName}`,
       `Subgroup: ${user.subgroup}`,
       `Job: ${user.job}`,
-      `Phone: ${user.phone}`,
-      `Address: ${user.address}`,
-      `Temp Address: ${user.temAddress}`,
       `User Name: ${user.userName}`,
       `Marriage Status: ${user.marriageStatus}`
     ];
+    const contentWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
 
     userDetails.forEach(detail => {
-      if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
-        doc.addPage(); 
-        currentY = 40; 
-      }
-      doc.text(detail, 50, currentY);
-      currentY += 20; 
-    });
-
-    if (user.spouseName) {
-      if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+      const textHeight = doc.heightOfString(detail, { width: contentWidth });
+      if (currentY + textHeight > doc.page.height - doc.page.margins.bottom) {
         doc.addPage();
         currentY = 40;
       }
-      doc.text(`Spouse Name: ${user.spouseName}`, 50, currentY);
-      currentY += 20;
+      doc.text(detail, doc.page.margins.left, currentY, { width: contentWidth });
+      currentY += textHeight + 10;
+    });
+
+    const longFields = [
+      { label: 'Address', value: user.address },
+      { label: 'Temp Address', value: user.temAddress },
+    ];
+
+    longFields.forEach(field => {
+      if (field.value) {
+        const fieldHeight = doc.heightOfString(`${field.label}: ${field.value}`, { width: contentWidth });
+        if (currentY + fieldHeight > doc.page.height - doc.page.margins.bottom) {
+          doc.addPage();
+          currentY = 40;
+        }
+        doc.text(`${field.label}: ${field.value}`, doc.page.margins.left, currentY, { width: contentWidth });
+        currentY += fieldHeight + 10;
+      }
+    });
+
+    if (user.spouseName) {
+      const spouseText = `Spouse Name: ${user.spouseName}`;
+      const spouseHeight = doc.heightOfString(spouseText, { width: contentWidth });
+      if (currentY + spouseHeight > doc.page.height - doc.page.margins.bottom) {
+        doc.addPage();
+        currentY = 40;
+      }
+      doc.text(spouseText, doc.page.margins.left, currentY, { width: contentWidth });
+      currentY += spouseHeight + 10;
     }
 
- 
     if (user.children && user.children.length > 0) {
       if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
         doc.addPage();
         currentY = 40;
       }
-      doc.text('Children Details:', 50, currentY);
+      doc.text('Children Details:', doc.page.margins.left, currentY);
       currentY += 20;
 
       user.children.forEach((child, index) => {
-        if (currentY + 40 > doc.page.height - doc.page.margins.bottom) {
-          doc.addPage();
-          currentY = 40;
-        }
-        doc.text(`Child ${index + 1}:`, 50, currentY);
-        currentY += 20;
-        doc.text(`  Name: ${child.name}`, 70, currentY);
-        currentY += 20;
-        doc.text(`  Age: ${child.age}`, 70, currentY);
-        currentY += 20;
-        doc.text(`  Gender: ${child.gender}`, 70, currentY);
-        currentY += 30; 
+        const childDetails = [
+          `Child ${index + 1}:`,
+          `  Name: ${child.name}`,
+          `  Age: ${child.age}`,
+          `  Gender: ${child.gender}`,
+        ];
+
+        childDetails.forEach(detail => {
+          const childDetailHeight = doc.heightOfString(detail, { width: contentWidth });
+          if (currentY + childDetailHeight > doc.page.height - doc.page.margins.bottom) {
+            doc.addPage();
+            currentY = 40;
+          }
+          doc.text(detail, doc.page.margins.left + 20, currentY, { width: contentWidth });
+          currentY += childDetailHeight + 5;
+        });
       });
     }
 
     doc.end();
-
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error generating PDF' });
   }
 };
-
 
 
 const generateUserPDF = async (user, outputPath) => {
@@ -365,7 +490,7 @@ const generateUserPDF = async (user, outputPath) => {
       doc.pipe(outputFile);
 
       const startY = 100;
-      const startX = (doc.page.width / 2) - 75; 
+      const startX = (doc.page.width / 2) - 75;
 
 
       if (user.photo) {
@@ -387,64 +512,86 @@ const generateUserPDF = async (user, outputPath) => {
       doc.fontSize(25).text('User Details', { align: 'center', y: textStartY });
       doc.fontSize(15);
 
-      const date = new Date(user.dob)
-      const formattedDate1 = date.toISOString().split('T')[0];
-
+      const formattedDate = new Date(user.dob).toISOString().split('T')[0];
       const userDetails = [
         `Name: ${user.name}`,
         `Age: ${user.age}`,
         `Gender: ${user.gender}`,
-        `DOB: ${formattedDate1}`,
+        `DOB: ${formattedDate}`,
+        `Phone: ${user.phone}`,
         `Father: ${user.fatherName}`,
         `Mother: ${user.motherName}`,
         `Grand Mother: ${user.grandmotherName}`,
         `Subgroup: ${user.subgroup}`,
         `Job: ${user.job}`,
-        `Phone: ${user.phone}`,
-        `Address: ${user.address}`,
-        `Temp Address: ${user.temAddress}`,
         `User Name: ${user.userName}`,
         `Marriage Status: ${user.marriageStatus}`
       ];
+      const contentWidth = doc.page.width - doc.page.margins.left - doc.page.margins.right;
 
       userDetails.forEach(detail => {
-        if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
-          doc.addPage(); 
-          currentY = 40; 
-        }
-        doc.text(detail, 50, currentY);
-        currentY += 20; 
-      });
-
-      if (user.spouseName) {
-        if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
+        const textHeight = doc.heightOfString(detail, { width: contentWidth });
+        if (currentY + textHeight > doc.page.height - doc.page.margins.bottom) {
           doc.addPage();
           currentY = 40;
         }
-        doc.text(`Spouse Name: ${user.spouseName}`, 50, currentY);
-        currentY += 20;
+        doc.text(detail, doc.page.margins.left, currentY, { width: contentWidth });
+        currentY += textHeight + 10;
+      });
+
+      const longFields = [
+        { label: 'Address', value: user.address },
+        { label: 'Temp Address', value: user.temAddress },
+      ];
+
+      longFields.forEach(field => {
+        if (field.value) {
+          const fieldHeight = doc.heightOfString(`${field.label}: ${field.value}`, { width: contentWidth });
+          if (currentY + fieldHeight > doc.page.height - doc.page.margins.bottom) {
+            doc.addPage();
+            currentY = 40;
+          }
+          doc.text(`${field.label}: ${field.value}`, doc.page.margins.left, currentY, { width: contentWidth });
+          currentY += fieldHeight + 10;
+        }
+      });
+
+      if (user.spouseName) {
+        const spouseText = `Spouse Name: ${user.spouseName}`;
+        const spouseHeight = doc.heightOfString(spouseText, { width: contentWidth });
+        if (currentY + spouseHeight > doc.page.height - doc.page.margins.bottom) {
+          doc.addPage();
+          currentY = 40;
+        }
+        doc.text(spouseText, doc.page.margins.left, currentY, { width: contentWidth });
+        currentY += spouseHeight + 10;
       }
+
       if (user.children && user.children.length > 0) {
         if (currentY + 20 > doc.page.height - doc.page.margins.bottom) {
           doc.addPage();
           currentY = 40;
         }
-        doc.text('Children Details:', 50, currentY);
+        doc.text('Children Details:', doc.page.margins.left, currentY);
         currentY += 20;
 
         user.children.forEach((child, index) => {
-          if (currentY + 40 > doc.page.height - doc.page.margins.bottom) {
-            doc.addPage();
-            currentY = 40;
-          }
-          doc.text(`Child ${index + 1}:`, 50, currentY);
-          currentY += 20;
-          doc.text(`  Name: ${child.name}`, 70, currentY);
-          currentY += 20;
-          doc.text(`  Age: ${child.age}`, 70, currentY);
-          currentY += 20;
-          doc.text(`  Gender: ${child.gender}`, 70, currentY);
-          currentY += 30; 
+          const childDetails = [
+            `Child ${index + 1}:`,
+            `  Name: ${child.name}`,
+            `  Age: ${child.age}`,
+            `  Gender: ${child.gender}`,
+          ];
+
+          childDetails.forEach(detail => {
+            const childDetailHeight = doc.heightOfString(detail, { width: contentWidth });
+            if (currentY + childDetailHeight > doc.page.height - doc.page.margins.bottom) {
+              doc.addPage();
+              currentY = 40;
+            }
+            doc.text(detail, doc.page.margins.left + 20, currentY, { width: contentWidth });
+            currentY += childDetailHeight + 5;
+          });
         });
       }
 
@@ -472,19 +619,19 @@ const downloadAllUserPDFs = async (req, res) => {
       users = mainUserDatas;
     } else {
       users = await User.find({});
-    } 
+    }
     if (!users.length) {
       return res.status(404).json({ error: 'No users found' });
     }
 
-    const pdfFolder = path.join(__dirname, 'pdfs'); 
+    const pdfFolder = path.join(__dirname, 'pdfs');
 
     if (!fs.existsSync(pdfFolder)) {
-      fs.mkdirSync(pdfFolder); 
+      fs.mkdirSync(pdfFolder);
     }
 
     const archive = archiver('zip', {
-      zlib: { level: 9 }  
+      zlib: { level: 9 }
     });
 
     res.setHeader('Content-Type', 'application/zip');
@@ -495,9 +642,9 @@ const downloadAllUserPDFs = async (req, res) => {
     for (const user of users) {
       const filename = `user_${user._id}.pdf`;
       const outputPath = path.join(pdfFolder, filename);
-      
+
       await generateUserPDF(user, outputPath);
-      
+
       archive.file(outputPath, { name: filename });
     }
 
@@ -509,5 +656,72 @@ const downloadAllUserPDFs = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, getUsers, downloadUsersExcel, downloadUserPDF,downloadAllUserPDFs };
+// const updateUserDetails = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const updates = req.body;
+
+//     if (req.file) {
+//       updates.photo = req.file.filename;
+//     }
+//     if (typeof updates.children === 'string') {
+//       try {
+//         updates.children = JSON.parse(updates.children);
+//       } catch (error) {
+//         return res.status(400).json({ error: 'Invalid children data format' });
+//       }
+//     }
+//     const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
+//     if (!updatedUser) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+//     res.json(updatedUser);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Failed to update user details' });
+//   }  
+// };
+const updateUserDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    if (req.file) {
+      updates.photo = req.file.filename;
+    }
+    console.log('updates.password', updates.pass);
+
+    if (updates.pass !='undefined') {
+      console.log('keri');
+      
+      updates.password = await bcrypt.hash(updates.pass, 10);
+    }
+
+    if (updates.children && typeof updates.children === 'string') {
+      try {
+        updates.children = JSON.parse(updates.children);
+      } catch (error) {
+        return res.status(400).json({ error: 'Invalid children data format' });
+      }
+    }
+
+    if (updates.children && !Array.isArray(updates.children)) {
+      return res.status(400).json({ error: 'Children must be an array' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Failed to update user details' });
+  }
+};
+
+
+module.exports = { registerUser, getUsers, downloadUsersExcel, downloadUserPDF, downloadAllUserPDFs, updateUserDetails };
+
 
