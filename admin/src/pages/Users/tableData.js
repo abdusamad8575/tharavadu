@@ -129,6 +129,7 @@ const TableData = () => {
               <MenuItem value="PALATTU CHIRAKKARA">PALATTU CHIRAKKARA</MenuItem>
               <MenuItem value="PALATTU MEETHALE">PALATTU MEETHALE</MenuItem>
               <MenuItem value="PALATTU KANNANKAI">PALATTU KANNANKAI</MenuItem>
+              <MenuItem value="FAMILY MEMBER">FAMILY MEMBER</MenuItem>
             </Select>
           </Grid>
           <Grid item sm={12} md={6}>
