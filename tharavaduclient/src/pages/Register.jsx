@@ -222,6 +222,7 @@ function Register() {
                 <option value="PALATTU CHIRAKKARA">PALATTU CHIRAKKARA</option>
                 <option value="PALATTU MEETHALE">PALATTU MEETHALE</option>
                 <option value="PALATTU KANNANKAI">PALATTU KANNANKAI</option>
+                <option value="FAMILY MEMBER">FAMILY MEMBER</option>
               </select>
             </div>
             <div className="form-group">
